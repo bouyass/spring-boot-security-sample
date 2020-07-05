@@ -11,7 +11,18 @@ public class homeController {
 	
 	@GetMapping(path="/")
 	public @ResponseBody String welcome() {
-		return "welcome";
+		return "<h1>welcome</h1>";
 	}
+	
+	@GetMapping(path="/admin")
+	public @ResponseBody String admin() {
+		return "<h1>welcome admin</h1>";
+	}
+	
+	@GetMapping(path="/user")
+	public @ResponseBody String user() {
+		return "<h1>welcome user</h1>";
+	}
+	
 	
 }

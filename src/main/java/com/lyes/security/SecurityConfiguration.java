@@ -2,6 +2,7 @@ package com.lyes.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -17,15 +18,30 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		
 		auth.inMemoryAuthentication()
 				.withUser("lyes")
-				.password("lyes")
-				.roles("USER");
+				.password("root")
+				.roles("USER")
+				.and()
+				.withUser("karim")
+				.password("karim")
+				.roles("ADMIN");
 		
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
+	}
+	
+	@Override
+	public void configure(HttpSecurity http) throws Exception{
+		http.authorizeRequests()
+				.antMatchers("/admin").hasRole("ADMIN")
+				.antMatchers("/user").hasAnyRole("USER","ADMIN")
+				.antMatchers("/").permitAll()
+				.and()
+				.formLogin();
 	}
 
 }
